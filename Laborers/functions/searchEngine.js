@@ -70,10 +70,3 @@ export async function performGoogleSearch(query, maxResults = 10) {
     await browser.close();
     return results;
 }
-
-// Function mapping
-export const functions = {
-    googleSearch: ({ query, maxResults }) => {
-        return performGoogleSearch(query, maxResults);
-    }
-};

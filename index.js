@@ -1,7 +1,7 @@
 import { processPrompt } from "./services/genAIService.js";
 
 async function main() {
-    const prompt = "Dim the lights so the room feels cozy and warm.";
+    const prompt = "Perform a Google search and retrieve search results.";
     const response = await processPrompt(prompt);
     console.log(response);
 }
