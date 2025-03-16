@@ -24,10 +24,3 @@ export async function setLightValues(brightness, colorTemp) {
         colorTemperature: colorTemp
     };
 }
-
-// Function mapping
-export const functions = {
-    controlLight: ({ brightness, colorTemperature }) => {
-        return setLightValues(brightness, colorTemperature);
-    }
-};

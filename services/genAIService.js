@@ -1,13 +1,13 @@
 import { GoogleGenerativeAI } from "@google/generative-ai";
-import { controlLightFunctionDeclaration } from "../functions/controlLight.js";
-import { functions } from "../functions/controlLight.js";
+import { functions } from "../Laborers/functions.js";
+import { declarations } from "../Laborers/declarations.js";
 
 const genAI = new GoogleGenerativeAI(process.env.GENERATIVE_AI_API_KEY);
 
 const generativeModel = genAI.getGenerativeModel({
     model: "gemini-2.0-flash",
     tools: {
-        functionDeclarations: [controlLightFunctionDeclaration],
+        functionDeclarations: declarations,
     },
 });
 
