@@ -7,22 +7,29 @@ const rl = readline.createInterface({
 });
 
 async function main() {
-    rl.question("Enter your prompt: ", async (prompt) => {
+    while (true) {
+        const prompt = await new Promise((resolve) => {
+            rl.question("\nEnter your prompt (or type 'exit' to quit): ", resolve);
+        });
+
         if (!prompt.trim()) {
-            console.log("Prompt cannot be empty. Please try again.");
+            console.log("⚠️ Prompt cannot be empty. Please try again.");
+            continue; // Repeats the loop
+        }
+
+        if (prompt.toLowerCase() === "exit") {
+            console.log("👋 Exiting chat...");
             rl.close();
-            return;
+            break;
         }
 
         try {
             const response = await processPrompt(prompt);
-            console.log("Response:", response);
+            console.log("🧠 Response:", response);
         } catch (error) {
-            console.error("Error processing prompt:", error);
+            console.error("❌ Error processing prompt:", error);
         }
-
-        rl.close();
-    });
+    }
 }
 
 main();
