@@ -24,7 +24,7 @@ export const googleSearchFunctionDeclaration = {
 // Function to perform the search
 export async function performGoogleSearch(query, maxResults = 10) {
     const browser = await puppeteer.launch({
-        headless: false, // Set to true if debugging is not needed
+        headless: true, // Set to true if debugging is not needed
         slowMo: 50,
         args: [
             '--no-sandbox',
