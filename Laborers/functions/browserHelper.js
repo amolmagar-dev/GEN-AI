@@ -1,5 +1,3 @@
-
-
 import puppeteer from 'puppeteer';
 
 let page; // Puppeteer page instance
@@ -28,8 +26,8 @@ export const functionDeclarations = [
             properties: {
                 action: {
                     type: "STRING",
-                    description: "The browser action to perform (e.g., 'navigate', 'click', 'type', 'evaluate').",
-                    enum: ["navigate", "click", "type", "evaluate"]
+                    description: "The browser action to perform (e.g., 'navigate', 'click', 'type', 'getCurrentPage').",
+                    enum: ["navigate", "click", "type" , "getCurrentPage"]
                 },
                 params: {
                     type: "OBJECT",
@@ -56,17 +54,39 @@ export async function browserAction(call) {
             case "navigate":
                 await page.goto(params.url, { waitUntil: 'domcontentloaded' });
                 return { result: `Navigated to ${params.url}` };
+
             case "click":
                 await page.click(params.selector);
                 return { result: `Clicked element: ${params.selector}` };
+
             case "type":
                 await page.type(params.selector, params.text);
                 return { result: `Typed text into: ${params.selector}` };
+
             case "evaluate":
-                const evalResult = await page.evaluate((code) => {
-                    return eval(code);
-                }, params.code);
+                const evalResult = await page.evaluate((code) => eval(code), params.code);
                 return { result: `Evaluated code: ${JSON.stringify(evalResult)}` };
+
+            case "getSelectors":
+                const selectors = await page.evaluate(() => {
+                    let elements = document.querySelectorAll('*');
+                    return Array.from(elements).map(el => {
+                        try {
+                            let selector = el.tagName.toLowerCase();
+                            if (el.id) selector += `#${el.id}`;
+                            if (el.className) selector += `.${el.className.split(' ').join('.')}`;
+                            return selector;
+                        } catch (e) {
+                            return null;
+                        }
+                    }).filter(Boolean);
+                });
+                return { currentPage: await page.url(), selectors };
+
+            case "getCurrentPage":
+                const pageContent = await page.content(); 
+                return { currentPage: await page.url(), html: pageContent };
+
             default:
                 return { error: `Unknown action: ${action}` };
         }

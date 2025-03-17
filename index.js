@@ -20,6 +20,7 @@ async function main() {
         if (prompt.toLowerCase() === "exit") {
             console.log("👋 Exiting chat...");
             rl.close();
+            process.exit(0)
             break;
         }
 
