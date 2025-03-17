@@ -18,6 +18,7 @@ export const googleSearchFunctionDeclaration = {
         },
         required: ["query"],
     },
+    description: "Returns an array of search results, containing the title and link of each result."
 };
 
 // Function to perform the search

@@ -13,22 +13,42 @@ const generativeModel = genAI.getGenerativeModel({
 
 export async function processPrompt(prompt) {
     const chat = generativeModel.startChat();
-    const result = await chat.sendMessage(prompt);
+    let result = await chat.sendMessage(prompt);
 
-    const call = result.response.functionCalls()[0];
+    while (true) {
+        const call = result.response.functionCalls()?.[0]; // Get the first function call
 
-    if (call) {
-        const apiResponse = await functions[call.name](call.args);
+        if (!call) break; // If no function call, stop recursion
 
-        const result2 = await chat.sendMessage([{
-            functionResponse: {
-                name: call.name,
-                response: apiResponse
+        console.log(`🔄 Function Call Detected: ${call.name}`, call.args);
+
+        // Check if the function exists in our mapping
+        if (functions[call.name]) {
+            try {
+                const apiResponse = await functions[call.name](call.args); // Execute function
+
+                console.log(`✅ Function Executed: ${call.name}`, apiResponse);
+
+                // Send response back to Gemini
+                // Send response back to Gemini
+                result = await chat.sendMessage([{
+                    functionResponse: {
+                        name: call.name,
+                        response: { // Wrap the array in an object
+                            results: apiResponse // apiResponse is your array of objects
+                        }
+                    }
+                }]);
+
+            } catch (error) {
+                console.error(`❌ Error executing function: ${call.name}`, error);
+                break;
             }
-        }]);
-
-        return result2.response.text();
+        } else {
+            console.warn(`⚠️ No matching function found for: ${call.name}`);
+            break;
+        }
     }
 
-    return "No function call detected.";
+    return result.response.text();
 }
