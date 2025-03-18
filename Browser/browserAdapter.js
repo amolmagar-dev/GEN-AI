@@ -41,7 +41,7 @@ class BrowserAdapter {
         return this.page;
     }
 
-    async navigate({url}) {
+    async navigate({ url }) {
         if (!this.page) await this.init();
         await this.page.goto(url, { waitUntil: 'domcontentloaded' });
     }
@@ -54,37 +54,37 @@ class BrowserAdapter {
         }
     }
 
-    async takeScreenshot(filepath = 'screenshot.png') {
+    async takeScreenshot({ filepath = 'screenshot.png' }) {
         if (!this.page) await this.init();
         await this.page.screenshot({ path: filepath });
     }
 
-    async getText(selector) {
+    async getText({ selector }) {
         if (!this.page) await this.init();
         return this.page.$eval(selector, el => el.innerText);
     }
 
-    async getAttribute(selector, attribute) {
+    async getAttribute({ selector, attribute }) {
         if (!this.page) await this.init();
         return this.page.$eval(selector, (el, attr) => el.getAttribute(attr), attribute);
     }
 
-    async click(selector) {
+    async click({ selector }) {
         if (!this.page) await this.init();
         await this.page.click(selector);
     }
 
-    async type({selector, text}, delay = 100) {
+    async type({ selector, text }, delay = 100) {
         if (!this.page) await this.init();
         await this.page.type(selector, text, { delay });
     }
 
-    async waitForSelector(selector, timeout = 5000) {
+    async waitForSelector({ selector, timeout = 5000 }) {
         if (!this.page) await this.init();
         await this.page.waitForSelector(selector, { timeout });
     }
 
-    async evaluate(callback, ...args) {
+    async evaluate({ callback, ...args }) {
         if (!this.page) await this.init();
         return this.page.evaluate(callback, ...args);
     }
@@ -94,7 +94,7 @@ class BrowserAdapter {
         return this.page.$$eval('a', anchors => anchors.map(a => a.href));
     }
 
-    async getAllText(selector) {
+    async getAllText({ selector }) {
         if (!this.page) await this.init();
         return this.page.$$eval(selector, elements => elements.map(el => el.innerText));
     }
