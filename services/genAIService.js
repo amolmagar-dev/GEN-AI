@@ -1,13 +1,12 @@
 import { GoogleGenerativeAI } from "@google/generative-ai";
-import { functions } from "../Laborers/functions.js";
-import { declarations } from "../Laborers/declarations.js";
+import BrowserAdapter from "../Browser/browserAdapter.js";
+import { browserAdapterFunctionDeclarations } from "../Browser/adapterDeclarations.js";
 
 const genAI = new GoogleGenerativeAI(process.env.GENERATIVE_AI_API_KEY);
-
 const generativeModel = genAI.getGenerativeModel({
     model: "gemini-2.0-flash",
     tools: {
-        functionDeclarations: declarations,
+        functionDeclarations: browserAdapterFunctionDeclarations,
     },
 });
 
@@ -23,9 +22,9 @@ export async function processPrompt(prompt) {
         console.log(`🔄 Function Call Detected: ${call.name}`, call.args);
 
         // Check if the function exists in our mapping
-        if (functions[call.name]) {
+        if (BrowserAdapter[call.name]) {
             try {
-                const apiResponse = await functions[call.name](call.args); // Execute function
+                const apiResponse = await BrowserAdapter[call.name](call.args); // Execute function
 
                 console.log(`✅ Function Executed: ${call.name}`, apiResponse);
 
