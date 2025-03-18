@@ -12,8 +12,31 @@ class BrowserAdapter {
 
     async init() {
         if (!this.browser) {
-            this.browser = await puppeteer.launch({ headless: false });
+            this.browser = await puppeteer.launch({
+                headless: false,
+                slowMo: 50,
+                args: [
+                    '--no-sandbox',
+                    '--disable-setuid-sandbox',
+                    '--disable-blink-features=AutomationControlled',
+                    '--start-maximized' // Opens the browser maximized
+                ]
+            });
+
             this.page = await this.browser.newPage();
+
+            // Get the available screen width and height dynamically
+            const { width, height } = await this.page.evaluate(() => ({
+                width: window.screen.availWidth,
+                height: window.screen.availHeight
+            }));
+
+            // Set the viewport dynamically to match the full available screen size
+            await this.page.setViewport({
+                width,
+                height,
+                deviceScaleFactor: 1
+            });
         }
         return this.page;
     }
