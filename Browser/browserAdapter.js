@@ -7,7 +7,6 @@ class BrowserAdapter {
             this.page = null;
             BrowserAdapter.instance = this;
         }
-        this.init();
         return BrowserAdapter.instance;
     }
 

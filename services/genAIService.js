@@ -1,6 +1,6 @@
 import { GoogleGenerativeAI } from "@google/generative-ai";
-import BrowserAdapter from "../Browser/browserAdapter.js";
-import { browserAdapterFunctionDeclarations } from "../Browser/adapterDeclarations.js";
+import BrowserAdapter from "../Browser/BrowserAdapter.js";
+import { browserAdapterFunctionDeclarations } from "../Browser/AdapterDeclarations.js";
 
 const genAI = new GoogleGenerativeAI(process.env.GENERATIVE_AI_API_KEY);
 const generativeModel = genAI.getGenerativeModel({
