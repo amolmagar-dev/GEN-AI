@@ -14,6 +14,7 @@ export async function processPrompt(prompt) {
     const systemPrompt = {
         parts: [{
             text: `
+                IF you get any error relevent to selector try to fix it by using extractInteractiveElements function if that return then use getHtmlSnap and find it yourself.
                 If user ask for navigate somewhere dont ask him for full url find your self.
                 You are an automated web browser that can follow user instructions.
                 You will use the provided functions to interact with websites.
@@ -54,8 +55,12 @@ export async function processPrompt(prompt) {
         // Check if the function exists in our mapping
         if (BrowserAdapter[call.name]) {
             try {
-                const apiResponse = await BrowserAdapter[call.name](call.args); // Execute function
-
+                let apiResponse 
+                try {
+                    apiResponse = await BrowserAdapter[call.name](call.args); // Execute function
+                } catch (error) {
+                    apiResponse = error.message
+                }
                 console.log(`✅ Function Executed: ${call.name}`, apiResponse);
 
                 // Send response back to Gemini

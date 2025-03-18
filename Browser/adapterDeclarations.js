@@ -155,5 +155,51 @@ export const browserAdapterFunctionDeclarations = [
             required: ["selector"]
         },
         description: "Extracts all text from elements matching the selector."
+    },
+    {
+        name: "extractInteractiveElements",
+        parameters: {
+            type: "OBJECT",
+            description: "Extracts interactive elements (buttons, links, inputs, etc.) that match a given filter text.",
+            properties: {
+                filterText: {
+                    type: "STRING",
+                    description: "Text to filter interactive elements by their visible text, aria-label, or placeholder. Case-insensitive."
+                }
+            },
+            required: ["filterText"]
+        },
+        description: "Retrieves a list of interactive elements (buttons, links, inputs, select, textarea) matching the given filter text."
+    },
+    {
+        name: "findURL",
+        parameters: {
+            type: "OBJECT",
+            description: "Searches for a query on Google and returns the first result URL.",
+            properties: {
+                query: {
+                    type: "STRING",
+                    description: "The search term to look up on Google."
+                }
+            },
+            required: ["query"]
+        },
+        description: "Performs a Google search with the provided query and returns the first organic result URL."
+    },
+    {
+        name: "getHtmlSnap",
+        parameters: {
+            type: "OBJECT",
+            description: "Captures an HTML snapshot of the current page.",
+            properties: {
+                type: {
+                    type: "STRING",
+                    description: "Defines the scope of the snapshot. Use 'full' for the entire page HTML or 'screen' for only the visible content.",
+                    enum: ["full", "screen"]
+                }
+            },
+            required: ["type"]
+        },
+        description: "Returns either the full HTML of the page or only the visible content based on the provided type."
     }
 ];
